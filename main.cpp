@@ -84,7 +84,6 @@ void updateBall(Ball &ball)
 		ball.direction.x = -(ball.direction.x);
 	}
 
-
 	if (ball.Ypos > 580)
 	{
 		ball.direction.y = -(ball.direction.y);
