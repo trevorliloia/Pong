@@ -5,45 +5,47 @@
 
 using namespace sfw;
 
-struct vec2
-{
-	float x;
-	float y;
-};
 
-struct Paddle
+class GameState 
 {
-	float Xpos = 400;
-	float Xsize = 100;
-	float Ypos = 100;
-	float Ysize = 40;
-	float powerCore = 0;
-	bool stretch;
-	bool blast;
-	float stretchSize;
-	float blastPower;
 
-};
+	struct vec2
+	{
+		float x;
+		float y;
+	};
 
-struct Ball
-{
-	float Xpos = 400;
-	float Ypos = 300;
-	float size = 30;
-	float speed = 10;
-	vec2 direction;
-	float damage = 1;
-};
+	struct Paddle
+	{
+		float Xpos = 400;
+		float Xsize = 100;
+		float Ypos = 100;
+		float Ysize = 40;
+		float powerCore = 0;
+		bool stretch;
+		bool blast;
+		float stretchSize;
+		float blastPower;
 
-struct Walls
-{
-	float leftWall;
-	float rightWall;
-	float topWall;
-};
+	};
 
-struct gameState
-{
+	struct Ball
+	{
+		float Xpos = 400;
+		float Ypos = 300;
+		float size = 30;
+		float speed = 1000;
+		vec2 direction;
+		float damage = 1;
+	};
+
+	struct Walls
+	{
+		float leftWall;
+		float rightWall;
+		float topWall;
+	};
+
 	int hit = 10;
 	int test = 100;
 	int score = 0;
@@ -54,14 +56,15 @@ struct gameState
 
 	float acc = 0;
 	char c = '\0';
+public:
+	double drand(float fMin, float fMax);
+	void drawPaddle(Paddle paddle) const;
+	void createBall(Ball &ball);
+	void updatePaddle(Paddle &player);
+	void updateBall(Ball &ball, Paddle &player, int &hit, int &score);
 
+
+	void create();
+	void update();
+	void draw() const;
 };
-
-double drand(float fMin, float fMax);
-void drawPaddle(Paddle paddle);
-Ball createBall();
-void updatePaddle(Paddle &player);
-void updateBall(Ball &ball, Paddle &player, int &hit, int &score);
-gameState createGameState();
-void updateGameState(gameState &gs);
-void drawGameState(gameState gs);

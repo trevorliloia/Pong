@@ -13,13 +13,16 @@ void main()
 {
 	initContext(800, 600, "NSFW Draw");
 	setBackgroundColor(WHITE);
+	GameState gs;
+	gs.create();
 
-	gameState gs = createGameState();
-
+	
 	while (stepContext())
 	{	
-		updateGameState(gs);
-		drawGameState(gs);
+		gs.update();
+		gs.draw();
+		//GameState::updateGameState(gs);
+		//GameState::drawGameState(gs);
 	}
 	
 	termContext();
