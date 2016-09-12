@@ -9,3 +9,11 @@
 #include "gameState.h"
 using namespace sfw;
 
+double drand(float fMin, float fMax);
+void drawPaddle(Paddle paddle);
+Ball createBall();
+void updatePaddle(Paddle player);
+void updateBall(Ball &ball, Paddle &player, int &hit, int &score);
+gameState createGameState();
+gameState updateGameState(gameState gs);
+gameState drawGameState(gameState gs);

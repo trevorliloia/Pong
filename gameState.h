@@ -62,8 +62,8 @@ void drawPaddle(Paddle paddle)
 Ball createBall()
 {
 	Ball ball;
-	ball.direction.x = float(drand(-1.1, 1.1));
-	ball.direction.y = float(drand(-1.1, 1.1));
+	ball.direction.x = float(drand(-1, 1));
+	ball.direction.y = float(drand(-1, 1));
 	return ball;
 }
 
@@ -161,7 +161,7 @@ gameState drawGameState(gameState gs)
 	drawString(gs.font, "~BALLIN~", gs.ball1.Xpos, gs.ball1.Ypos, 10 + (cos(-gs.acc) * 20), 10 + (sin(-gs.acc) * 20), -gs.acc * 35, '\0', MAGENTA);
 	drawString(gs.font, "Score: ", 50, 50, 15 + (cos(-gs.acc) / 2), 15 + (sin(-gs.acc) / 2), 0, '\0', BLACK);
 	drawString(gs.font, "Score: ", 50, 50, 15 + -(cos(-gs.acc) / 2), 15 + -(sin(-gs.acc) / 2), 0, '\0', MAGENTA);
-	drawScore(gs.font, gs.score, gs.acc);
+	drawScore(gs.font, gs.score, gs.acc, 150, 50, 15);
 	drawCircle(gs.ball1.Xpos, gs.ball1.Ypos, gs.ball1.size, 12, MAGENTA);
 	drawPaddle(gs.player);
 }

@@ -2,7 +2,7 @@
 
 
 
-void drawScore(unsigned fone, int score, float acc);
+void drawScore(unsigned font, int score, float acc, int x, int y, int size);
 
 void drawWin(unsigned font);
 

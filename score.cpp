@@ -5,14 +5,17 @@
 #include <stdlib.h>
 #include <iostream>
 #include "score.h"
+#include "gameState.h"
 using namespace sfw;
 
-void drawScore(unsigned font, int score, float acc)
+void drawScore(unsigned font, int score, float acc, int x, int y, int size)
 {
 	char buffer[64] = { 0 };
 	sprintf_s(buffer, "%d", score);
-	drawString(font, buffer, 150, 50, 15 + (cos(-acc) * 2), 15 + (sin(-acc) * 2), 0, '\0', BLACK);
-	drawString(font, buffer, 150, 50, 15 + -(cos(-acc) * 2), 15 + -(sin(-acc) * 2), 0, '\0', MAGENTA);
+	drawString(font, buffer, 
+		x, y, size + (cos(-acc) * 2),
+		15 + (sin(-acc) * 2), 0, '\0', BLACK);
+	drawString(font, buffer, x, y, size + -(cos(-acc) * 2), 15 + -(sin(-acc) * 2), 0, '\0', MAGENTA);
 
 }
 
