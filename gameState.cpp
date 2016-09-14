@@ -63,18 +63,21 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 	
 		if (ball.Xpos < 20)
 		{
-			ball.direction.x = -(ball.direction.x);
+			ball.direction.x = -(ball.direction.x);			
+			ball.direction.y = drand(ball.direction.y - 1, ball.direction.y + 1);
 			ball.Xpos = 21;
 		}
 		else if (ball.Xpos > 780)
 		{
 			ball.direction.x = -(ball.direction.x);
+			ball.direction.y = drand(ball.direction.y - .1, ball.direction.y + .1);
 			ball.Xpos = 779;
 		}
 
 		if (ball.Ypos > 580)
 		{
 			ball.direction.y = -(ball.direction.y);
+			ball.direction.x = drand(ball.direction.x - .1, ball.direction.x + .1);
 			wallhealth--;
 			ball.Ypos = 579;
 		}
@@ -82,9 +85,11 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 		if (ball.Ypos <= (player.Ypos + (player.Ysize)) && ball.Xpos >= (player.Xpos - (player.Xsize/1.5)) && ball.Xpos <= (player.Xpos + (player.Xsize/1.5)))
 		{
 			ball.direction.y = -(ball.direction.y);
-			ball.Ypos = player.Ypos + 50;
+			ball.direction.x = drand(ball.direction.x - .1, ball.direction.x + .1);
+			ball.Ypos = player.Ypos + 55;
 			score++;
-			ball.speed = 2500 + (score * 25);
+			ball.speed = 500 + (score * 15);
+			
 		}
 
 }

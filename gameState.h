@@ -34,7 +34,7 @@ class GameState
 		float Xpos = 400;
 		float Ypos = 300;
 		float size = 30;
-		float speed = 2500;
+		float speed = 500;
 		vec2 direction;
 		float damage = 1;
 	};
