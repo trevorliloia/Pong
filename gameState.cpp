@@ -40,6 +40,15 @@ void GameState::updatePaddle(Paddle &player)
 	{
 		player.Xpos += 8;
 	}
+
+	if (player.Xpos > 800)
+	{
+		player.Xpos = 0;
+	}
+	else if (player.Xpos < 0)
+	{
+		player.Xpos = 800;
+	}
 }
 
 void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
@@ -51,20 +60,23 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 	ball.Xpos += (ball.direction.x * ball.speed) * sfw::getDeltaTime();
 	ball.Ypos += (ball.direction.y * ball.speed) * sfw::getDeltaTime();
 
-	if (hit <= 0)
-	{
+	
 		if (ball.Xpos < 20)
 		{
 			ball.direction.x = -(ball.direction.x);
+			ball.Xpos = 21;
 		}
 		else if (ball.Xpos > 780)
 		{
 			ball.direction.x = -(ball.direction.x);
+			ball.Xpos = 779;
 		}
 
 		if (ball.Ypos > 580)
 		{
 			ball.direction.y = -(ball.direction.y);
+			wallhealth--;
+			ball.Ypos = 579;
 		}
 
 		if (ball.Ypos <= (player.Ypos + (player.Ysize)) && ball.Xpos >= (player.Xpos - (player.Xsize/1.5)) && ball.Xpos <= (player.Xpos + (player.Xsize/1.5)))
@@ -72,10 +84,9 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 			ball.direction.y = -(ball.direction.y);
 			ball.Ypos = player.Ypos + 50;
 			score++;
-			ball.speed = 1000 + (score * 50);
+			ball.speed = 2500 + (score * 25);
 		}
 
-	}
 }
 
 void GameState::create() 
@@ -92,21 +103,34 @@ void GameState::create()
 void GameState::update() 
 {
 	hit--;
-
+	if (player.powerCore < 100)
+	{
+		player.powerCore += (sfw::getDeltaTime() * 5);
+	}
 	acc += getDeltaTime();
 
 	updatePaddle(player);
 	updateBall(ball1, player, hit, score);
+
 }
 
 void GameState::draw() const
 {
-	drawString(font, "~BALLIN~", ball1.Xpos, ball1.Ypos, 10 + (cos(-acc) * 20), 10 + (sin(-acc) * 20), -acc * 35, '\0', MAGENTA);
+	drawString(font, "~BALLIN~", ball1.Xpos + -(cos(-acc) * 2), ball1.Ypos + -(sin(-acc) * 2), 10 + (cos(-acc) * 20), 10 + (sin(-acc) * 20), -acc * 35, '\0', BLUE);
+	drawString(font, "~BALLIN~", ball1.Xpos + (cos(-acc) * 2), ball1.Ypos + (sin(-acc) * 2), 10 + (cos(-acc) * 20), 10 + (sin(-acc) * 20), -acc * 35, '\0', MAGENTA);
+	drawScore(font, wallhealth, acc, 150, 500, 20);
 	drawString(font, "Score: ", 50, 50, 15 + (cos(-acc) / 2), 15 + (sin(-acc) / 2), 0, '\0', BLACK);
 	drawString(font, "Score: ", 50, 50, 15 + -(cos(-acc) / 2), 15 + -(sin(-acc) / 2), 0, '\0', MAGENTA);
 	drawScore(font, score, acc, 150, 50, 15);
-	drawCircle(ball1.Xpos, ball1.Ypos, ball1.size, 12, MAGENTA);
+	drawCircle(ball1.Xpos + -(cos(-acc) * 2), ball1.Ypos + -(sin(-acc) * 2), ball1.size, 12, BLUE);
+	drawCircle(ball1.Xpos + (cos(-acc) * 2), ball1.Ypos + (sin(-acc) * 2), ball1.size, 12, MAGENTA);
 	drawPaddle(player);
+
+	for (int i = 0; i < player.powerCore; i++)
+	{
+		drawLine(550 + i, 60, 550 + i, 40, CYAN);
+	}	
+	drawString(font, "Power", 540, 50, 15 + -(cos(-acc) / 2), 15 + -(sin(-acc) / 2), 0, '\0', BLACK);
 }
 
 

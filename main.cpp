@@ -7,16 +7,16 @@
 #include <stdlib.h>
 #include "score.h"
 #include "gameState.h"
+#include "main.h"
 using namespace sfw;
 
 void main()
 {
-	initContext(800, 600, "NSFW Draw");
+	initContext(800, 600, "Nausous Neons and the Asthmatic Apparition");
 	setBackgroundColor(WHITE);
 	GameState gs;
 	gs.create();
 
-	
 	while (stepContext())
 	{	
 		gs.update();
@@ -24,7 +24,7 @@ void main()
 		//GameState::updateGameState(gs);
 		//GameState::drawGameState(gs);
 	}
-	
+
 	termContext();
 }
 

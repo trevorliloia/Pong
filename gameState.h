@@ -34,7 +34,7 @@ class GameState
 		float Xpos = 400;
 		float Ypos = 300;
 		float size = 30;
-		float speed = 1000;
+		float speed = 2500;
 		vec2 direction;
 		float damage = 1;
 	};
@@ -49,7 +49,7 @@ class GameState
 	int hit = 10;
 	int test = 100;
 	int score = 0;
-	int wallhealth = 100;
+	int wallhealth = 20;
 	Paddle player;
 	Ball ball1;
 	int font;
