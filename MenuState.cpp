@@ -3,9 +3,10 @@
 #include <stdio.h>
 using namespace sfw;
 
-void MenuState::init(unsigned a_font)
+void MenuState::init(unsigned a_font, unsigned a_brick)
 {
 	font = a_font;
+	brick = a_brick;
 }
 
 void MenuState::play()
@@ -36,6 +37,7 @@ void MenuState::step()
 void MenuState::draw() const
 {
 	drawString(font, "[P]lay or [V]ersus? \nPlease Don't [Q]uit.", 200, 300, 20, 20, 0, '\0', BLACK);
+	drawTexture(brick, 0, 600, sfw::getTextureWidth(brick), sfw::getTextureHeight(brick), 0.f, false);
 }
 
 STATE MenuState::next() const

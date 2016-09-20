@@ -14,6 +14,7 @@ class MenuState
 {
 	float timer;
 	unsigned font;
+	unsigned brick;
 	bool game =  false;
 	bool versus = false;
 	bool quit = false;
@@ -22,7 +23,7 @@ class MenuState
 	char menuItem;
 
 public:
-	void init(unsigned font);
+	void init(unsigned font, unsigned brick);
 	void play();
 	void step();
 	void draw() const;

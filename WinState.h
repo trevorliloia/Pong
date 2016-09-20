@@ -14,9 +14,10 @@ class WinState
 {
 	float timer;
 	unsigned font;
+	unsigned winTex;
 
 public:
-	void init(unsigned font);
+	void init(unsigned font, unsigned winTex);
 	void play();
 	void step();
 	void draw() const;

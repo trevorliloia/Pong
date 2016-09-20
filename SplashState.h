@@ -14,9 +14,9 @@ class SplashState
 {
 	float timer;
 	unsigned font;
-
+	unsigned drug;
 public:
-	void init(unsigned font);
+	void init(unsigned font, unsigned drug);
 	void play();
 	void step();
 	void draw() const;

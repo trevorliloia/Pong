@@ -14,9 +14,10 @@ class LoseState
 {
 	float timer;
 	unsigned font;
+	unsigned loseTex;
 
 public:
-	void init(unsigned font);
+	void init(unsigned font, unsigned loseTex);
 	void play();
 	void step();
 	void draw() const;
