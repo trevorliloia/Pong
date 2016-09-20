@@ -236,11 +236,11 @@ STATE GameState::next()
 {
 	if (won)
 	{
-		return ENTER_SPLASH;
+		return ENTER_VICTORY;
 	}
 	if (lost)
 	{
-		return ENTER_SPLASH;
+		return ENTER_LOSE;
 	}
 
 	return GAME;

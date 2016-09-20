@@ -11,6 +11,8 @@
 #include "MenuState.h"
 #include "main.h"
 #include "Versus.h"
+#include "WinState.h"
+#include "LoseState.h"
 using namespace sfw;
 
 void main()
@@ -20,11 +22,15 @@ void main()
 
 	unsigned font = loadTextureMap("res/fontmap.png", 16, 16);
 
+	LoseState lose;
 	SplashState splash;
 	GameState gs;
 	MenuState menu;
 	Versus versus;
+	WinState win;
 
+	win.init(font);
+	lose.init(font);
 	splash.init(font);
 	gs.create();
 	menu.init(font);
@@ -60,6 +66,18 @@ void main()
 			versus.update();
 			versus.draw();
 			current = versus.next();
+			break;
+		case ENTER_VICTORY: win.play();
+		case VICTORY:
+			win.step();
+			win.draw();
+			current = win.next();
+			break;
+		case ENTER_LOSE: lose.play();
+		case LOSE:
+			lose.step();
+			lose.draw();
+			current = lose.next();
 			break;
 		case QUIT:
 			running = false;

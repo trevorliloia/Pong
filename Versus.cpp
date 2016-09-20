@@ -96,6 +96,7 @@ void Versus::updateBall(Ball & ball, Paddle1 & player1, Paddle1 &player2, int & 
 			ball.speed = 500;
 			ball.Xpos = 400;
 			ball.Ypos = 300;
+			ball.direction.x = -ball.direction.x;
 		}
 		else if (ball.Xpos > 780)
 		{
@@ -103,6 +104,7 @@ void Versus::updateBall(Ball & ball, Paddle1 & player1, Paddle1 &player2, int & 
 			ball.speed = 500;
 			ball.Xpos = 400;
 			ball.Ypos = 300;
+			ball.direction.x = -ball.direction.x;
 		}
 		if (ball.Ypos > 580)
 		{
@@ -118,18 +120,18 @@ void Versus::updateBall(Ball & ball, Paddle1 & player1, Paddle1 &player2, int & 
 
 		}
 
-		if (ball.Xpos <= (player1.Xpos + 20) && ball.Ypos > (player1.Ypos - 50) && ball.Ypos < (player1.Ypos + 50))
+		if (ball.Xpos <= (player1.Xpos + 40) && ball.Ypos > (player1.Ypos - 50) && ball.Ypos < (player1.Ypos + 50))
 		{
 			ball.direction.x = -(ball.direction.x);
 			ball.direction.y = drand(ball.direction.y - .1, ball.direction.y + .1);
-			ball.Xpos = player1.Xpos + 25;
+			ball.Xpos = player1.Xpos + 45;
 		}
 
-		if (ball.Xpos >= (player2.Xpos - 20) && ball.Ypos >(player2.Ypos - 50) && ball.Ypos < (player2.Ypos + 50))
+		if (ball.Xpos >= (player2.Xpos - 40) && ball.Ypos >(player2.Ypos - 50) && ball.Ypos < (player2.Ypos + 50))
 		{
 			ball.direction.x = -(ball.direction.x);
 			ball.direction.y = drand(ball.direction.y - .1, ball.direction.y + .1);
-			ball.Xpos = player2.Xpos - 25;
+			ball.Xpos = player2.Xpos - 45;
 		}
 
 	}
@@ -195,7 +197,11 @@ STATE Versus::next()
 {
 	if (won)
 	{
-		return ENTER_SPLASH;
+		return ENTER_VICTORY;
+	}
+	if (lost)
+	{
+		return ENTER_LOSE;
 	}
 	return VERSUS;
 }
