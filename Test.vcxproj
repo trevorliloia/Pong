@@ -126,12 +126,19 @@
   <ItemGroup>
     <ClCompile Include="gameState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="score.cpp" />
+    <ClCompile Include="SplashState.cpp" />
+    <ClCompile Include="Versus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gameState.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MenuState.h" />
     <ClInclude Include="score.h" />
+    <ClInclude Include="SplashState.h" />
+    <ClInclude Include="statesconst.h" />
+    <ClInclude Include="Versus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

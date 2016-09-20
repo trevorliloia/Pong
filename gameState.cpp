@@ -26,29 +26,59 @@ void GameState::drawPaddle(Paddle paddle) const
 
 void GameState::createBall(Ball &ball)
 {
+	ball.Xpos = 400;
+	ball.Ypos = 300;
 	ball.direction.x = float(drand(-1, 1));
-	ball.direction.y = float(drand(-1, 1));
+	ball.direction.y = float(drand(0, 1));
 }
 
 void GameState::updatePaddle(Paddle &player)
 {
-	if (getKey('A'))
+	if (playing)
 	{
-		player.Xpos -= 8;
-	}
-	else if (getKey('D'))
-	{
-		player.Xpos += 8;
+		if (getKey('A'))
+		{
+			player.Xpos -= 8;
+		}
+		else if (getKey('D'))
+		{
+			player.Xpos += 8;
+		}
+
+		if (player.Xpos > 800)
+		{
+			player.Xpos = 0;
+		}
+		else if (player.Xpos < 0)
+		{
+			player.Xpos = 800;
+		}
+
+
+		if (getKey(' ') && player.powerCore > 0)
+		{
+			--player.powerCore;
+			player.Xsize = 150;
+		}
+		else
+		{
+			player.Xsize = 100;
+		}
+
+
+		if (getKey('W') && player.powerCore >= 100)
+		{
+			player.powerCore -= 100;
+			player.blast = true;
+		}
 	}
 
-	if (player.Xpos > 800)
+	if (getKey('P') && keyTime >= 50)
 	{
-		player.Xpos = 0;
+		keyTime = 0;
+		playing = !playing;
 	}
-	else if (player.Xpos < 0)
-	{
-		player.Xpos = 800;
-	}
+	keyTime++;
 }
 
 void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
@@ -57,13 +87,15 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 
 	//frame locked:
 		// we are updating without respect to the actual passage of time
-	ball.Xpos += (ball.direction.x * ball.speed) * sfw::getDeltaTime();
-	ball.Ypos += (ball.direction.y * ball.speed) * sfw::getDeltaTime();
+	if (playing)
+	{
+		ball.Xpos += (ball.direction.x * ball.speed) * sfw::getDeltaTime();
+		ball.Ypos += (ball.direction.y * ball.speed) * sfw::getDeltaTime();
 
-	
+
 		if (ball.Xpos < 20)
 		{
-			ball.direction.x = -(ball.direction.x);			
+			ball.direction.x = -(ball.direction.x);
 			ball.direction.y = drand(ball.direction.y - 1, ball.direction.y + 1);
 			ball.Xpos = 21;
 		}
@@ -73,7 +105,6 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 			ball.direction.y = drand(ball.direction.y - .1, ball.direction.y + .1);
 			ball.Xpos = 779;
 		}
-
 		if (ball.Ypos > 580)
 		{
 			ball.direction.y = -(ball.direction.y);
@@ -81,38 +112,86 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 			wallhealth--;
 			ball.Ypos = 579;
 		}
-
-		if (ball.Ypos <= (player.Ypos + (player.Ysize)) && ball.Xpos >= (player.Xpos - (player.Xsize/1.5)) && ball.Xpos <= (player.Xpos + (player.Xsize/1.5)))
+		if (ball.Ypos <= (player.Ypos + (player.Ysize)) && ball.Ypos >= (player.Ypos - 10) && ball.Xpos >= (player.Xpos - (player.Xsize / 1.5)) && ball.Xpos <= (player.Xpos + (player.Xsize / 1.5)))
 		{
 			ball.direction.y = -(ball.direction.y);
 			ball.direction.x = drand(ball.direction.x - .1, ball.direction.x + .1);
 			ball.Ypos = player.Ypos + 55;
 			score++;
 			ball.speed = 500 + (score * 15);
-			
+
 		}
 
+		if (ball.Ypos < 0 && score >= 5)
+		{
+			score -= 5;
+			ball.Xpos = 400;
+			ball.Ypos = 300;
+			ball.speed = 500;
+			ball.direction.y = .5;
+		}
+		else if (ball.Ypos < 0 && score < 5)
+		{
+			lost = true;
+		}
+#pragma region BlastUpdater
+
+		if (player.blast == true && player.blastTimer > 0)
+		{
+			--player.blastTimer;
+
+			if (ball.Ypos < 50)
+			{
+				ball.direction.y = -(ball.direction.y);
+				ball.direction.x = drand(ball.direction.x - .1, ball.direction.x + .1);
+				ball.Ypos = 51;
+			}
+
+		}
+		if (player.blastTimer <= 0)
+		{
+			player.blast = false;
+			player.blastTimer = 20;
+		}
+#pragma endregion
+	}
+
+	
+	
 }
 
 void GameState::create() 
 {
-	createBall(ball1);
+	
+	won = false;
+	lost = false;
+	wallhealth = 20;
+	score = 0;
 	while (test > 0)
 	{
 		test -= 1;
 		drand(-1, 1);
 	}
+	createBall(ball1);
 	font = loadTextureMap("res/fontmap.png", 16, 16);
 }
 
 void GameState::update() 
 {
 	hit--;
-	if (player.powerCore < 100)
+	if (playing)
 	{
-		player.powerCore += (sfw::getDeltaTime() * 5);
+		if (player.powerCore < 100)
+		{
+			player.powerCore += (sfw::getDeltaTime() * 5);
+		}
+		acc += getDeltaTime();
+		if (wallhealth <= 0)
+		{
+			won = true;
+		}
 	}
-	acc += getDeltaTime();
+	
 
 	updatePaddle(player);
 	updateBall(ball1, player, hit, score);
@@ -133,11 +212,36 @@ void GameState::draw() const
 
 	for (int i = 0; i < player.powerCore; i++)
 	{
-		drawLine(550 + i, 60, 550 + i, 40, CYAN);
+		if (player.powerCore < 100)
+		{ 
+			drawLine(550 + i, 60, 550 + i, 40, CYAN); 
+		}
+		else
+		{
+			drawLine(550 + i, 60, 550 + i, 40, RED);
+		}
+		
 	}	
+	if (player.blast == true)
+	{
+		drawLine(0, 35, 800, 35, GREEN);
+	}
 	drawString(font, "Power", 540, 50, 15 + -(cos(-acc) / 2), 15 + -(sin(-acc) / 2), 0, '\0', BLACK);
 }
 
 
 
 
+STATE GameState::next()
+{
+	if (won)
+	{
+		return ENTER_SPLASH;
+	}
+	if (lost)
+	{
+		return ENTER_SPLASH;
+	}
+
+	return GAME;
+}
