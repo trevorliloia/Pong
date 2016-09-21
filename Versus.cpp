@@ -142,8 +142,9 @@ void Versus::createPaddle(Paddle1 & player, float Xpos)
 	player.Xpos = Xpos;
 }
 
-void Versus::create()
+void Versus::create(unsigned a_paddle2)
 {
+	paddle2 = a_paddle2;
 	won = false;
 	while (test > 0)
 	{
@@ -188,8 +189,11 @@ void Versus::draw() const
 	drawScore(font, score2, acc, 650, 50, 15);
 	drawCircle(ball1.Xpos + -(cos(-acc) * 2), ball1.Ypos + -(sin(-acc) * 2), ball1.size, 12, BLUE);
 	drawCircle(ball1.Xpos + (cos(-acc) * 2), ball1.Ypos + (sin(-acc) * 2), ball1.size, 12, MAGENTA);
-	drawPaddle(player1);
-	drawPaddle(player2);
+	
+
+	drawTexture(paddle2, player1.Xpos - (player1.Xsize / 2), player1.Ypos + (player1.Ysize / 2), getTextureWidth(paddle2), getTextureHeight(paddle2), 0.f, false);
+	drawTexture(paddle2, player2.Xpos - (player2.Xsize / 2), player2.Ypos + (player2.Ysize / 2), getTextureWidth(paddle2), getTextureHeight(paddle2), 0.f, false);
+
 
 }
 

@@ -18,10 +18,14 @@ double GameState::drand(float fMin, float fMax)
 
 void GameState::drawPaddle(Paddle paddle) const
 {
-	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, CYAN);
-	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, CYAN);
-	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos - paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, CYAN);
-	drawLine(paddle.Xpos + paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, CYAN);
+	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, BLACK);
+	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, BLACK);
+	for (int i = 0; i < 40; ++i)
+	{
+		drawLine(paddle.Xpos - paddle.Xsize / 2, (paddle.Ypos + paddle.Ysize / 2) - i, paddle.Xpos + paddle.Xsize / 2, (paddle.Ypos + paddle.Ysize / 2) - i, BLACK);
+	}
+	drawLine(paddle.Xpos - paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos - paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, BLACK);
+	drawLine(paddle.Xpos + paddle.Xsize / 2, paddle.Ypos + paddle.Ysize / 2, paddle.Xpos + paddle.Xsize / 2, paddle.Ypos - paddle.Ysize / 2, BLACK);
 }
 
 void GameState::createBall(Ball &ball)
@@ -59,10 +63,12 @@ void GameState::updatePaddle(Paddle &player)
 		{
 			--player.powerCore;
 			player.Xsize = 150;
+			stretch = 50;
 		}
 		else
 		{
 			player.Xsize = 100;
+			stretch = 0;
 		}
 
 
@@ -134,35 +140,16 @@ void GameState::updateBall(Ball &ball, Paddle &player, int &hit, int &score)
 		{
 			lost = true;
 		}
-#pragma region BlastUpdater
 
-		if (player.blast == true && player.blastTimer > 0)
-		{
-			--player.blastTimer;
-
-			if (ball.Ypos < 50)
-			{
-				ball.direction.y = -(ball.direction.y);
-				ball.direction.x = drand(ball.direction.x - .1, ball.direction.x + .1);
-				ball.Ypos = 51;
-			}
-
-		}
-		if (player.blastTimer <= 0)
-		{
-			player.blast = false;
-			player.blastTimer = 20;
-		}
-#pragma endregion
 	}
 
 	
 	
 }
 
-void GameState::create() 
+void GameState::create(unsigned a_paddle) 
 {
-	
+	paddle = a_paddle;
 	won = false;
 	lost = false;
 	wallhealth = 20;
@@ -209,6 +196,7 @@ void GameState::draw() const
 	drawCircle(ball1.Xpos + -(cos(-acc) * 2), ball1.Ypos + -(sin(-acc) * 2), ball1.size, 12, BLUE);
 	drawCircle(ball1.Xpos + (cos(-acc) * 2), ball1.Ypos + (sin(-acc) * 2), ball1.size, 12, MAGENTA);
 	drawPaddle(player);
+	drawTexture(paddle, player.Xpos - (player.Xsize / 2), player.Ypos + (player.Ysize / 2), getTextureWidth(paddle), getTextureHeight(paddle), 0.f, false);
 
 	for (int i = 0; i < player.powerCore; i++)
 	{

@@ -78,7 +78,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfw_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfw_d.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AsterState.cpp" />
     <ClCompile Include="gameState.cpp" />
     <ClCompile Include="LoseState.cpp" />
     <ClCompile Include="main.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="WinState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AsterState.h" />
     <ClInclude Include="gameState.h" />
     <ClInclude Include="LoseState.h" />
     <ClInclude Include="main.h" />

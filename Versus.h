@@ -59,6 +59,8 @@ class Versus
 		float topWall;
 	};
 
+
+	unsigned paddle2;
 	int hit = 10;
 	int test = 100;
 	int score1 = 0;
@@ -82,7 +84,7 @@ public:
 	void updateBall(Ball &ball, Paddle1 &player1, Paddle1 &player2, int &hit, int &score1, int &score2);
 	void createPaddle(Paddle1 &player, float Xpos);
 
-	void create();
+	void create(unsigned paddle2);
 	void update();
 	void draw() const;
 

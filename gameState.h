@@ -46,6 +46,8 @@ class GameState
 		float topWall;
 	};
 
+
+	unsigned paddle;
 	int hit = 10;
 	int test = 100;
 	int score = 0;
@@ -53,6 +55,7 @@ class GameState
 	Paddle player;
 	Ball ball1;
 	int font;
+	int stretch = 0;
 	int keyTime = 50;
 	bool playing = true;
 	bool lost = false;
@@ -67,7 +70,7 @@ public:
 	void updateBall(Ball &ball, Paddle &player, int &hit, int &score);
 
 
-	void create();
+	void create(unsigned paddle);
 	void update();
 	void draw() const;
 
