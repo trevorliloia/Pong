@@ -17,13 +17,17 @@ double AsterState::drand(float fMin, float fMax)
 
 void AsterState::drawShip(Ship player) const
 {
-
+	drawTexture(ship, player.Xpos, player.Ypos, sfw::getTextureWidth(ship), sfw::getTextureHeight(ship), player.rotation, false);
+	for (int i = 0; i < shots.listSize; ++i)
+	{
+		drawTexture(shot, shots.listItems[i].Xpos, shots.listItems[i].Ypos, getTextureWidth(shot), getTextureWidth(shot), shots.listItems[i].rotation, false);
+	}
 }
 
 void AsterState::createRock(Rock &rocks)
 {
-	rocks.Xpos = 400;
-	rocks.Ypos = 300;
+	rocks.Xpos = 400 + float(drand(-350, 350));
+	rocks.Ypos = 300 + float(drand(-250, 250));
 	rocks.direction.x = float(drand(-1, 1));
 	rocks.direction.y = float(drand(0, 1));
 }
@@ -35,14 +39,14 @@ void AsterState::updateShip(Ship & player)
 		if (getKey('A'))
 		{
 			player.rotation += 4;
-			player.Xpos -= cos((player.rotation + 90) * PI / 180);
-			player.Ypos -= sin((player.rotation + 90) * PI / 180);
+			player.Xpos -= (float)(cos((player.rotation + 90) * PI / 180));
+			player.Ypos -= (float)(sin((player.rotation + 90) * PI / 180));
 		}
 		else if (getKey('D'))
 		{
 			player.rotation -= 4;
-			player.Xpos += cos((player.rotation + 90) * PI / 180);
-			player.Ypos += sin((player.rotation + 90) * PI / 180);
+			player.Xpos += (float)cos((player.rotation + 90) * PI / 180);
+			player.Ypos += (float)sin((player.rotation + 90) * PI / 180);
 		}
 
 		if (player.Xpos > 800)
@@ -61,27 +65,31 @@ void AsterState::updateShip(Ship & player)
 		{
 			player.Ypos = 600;
 		}
-		player.direction.x = cos((player.rotation + 90) * PI / 180);
-		player.direction.y = sin((player.rotation + 90) * PI / 180);
+		player.direction.x = (float)cos((player.rotation + 90) * PI / 180);
+		player.direction.y = (float)sin((player.rotation + 90) * PI / 180);
 		if (getKey('W'))
 		{
-			player.speed += 10;
+			player.speed += 20;
 		}
 		if (getKey('S'))
 		{
-			player.speed -= 10;
+			player.speed -= 20;
 		}
 
 		player.Xpos += (player.direction.x * player.speed) * sfw::getDeltaTime();
 		player.Ypos += (player.direction.y * player.speed) * sfw::getDeltaTime();
 		
-		if (player.speed < 0)
+		if (player.speed != 0)
 		{
-			player.speed++;
+			player.speed -= (player.speed / 100);
 		}
-		else if (player.speed > 400)
+		else if (player.speed < -200)
 		{
-			player.speed = 400;
+			player.speed = -200;
+		}
+		else if (player.speed > 200)
+		{
+			player.speed = 200;
 		}
 		else
 		{
@@ -99,6 +107,20 @@ void AsterState::updateShip(Ship & player)
 			player.blastTimer--;
 		}
 
+		if (getKey(' '))
+		{
+			for (int i = shots.listSize; i == shots.listSize; i = shots.listSize)
+			{
+				createBullet(shots, i, player);
+				shots.listSize++;
+			}
+		}
+
+		for (int i = 0; i < shots.listSize; ++i)
+		{
+			shots.listItems[i].Xpos += (shots.listItems[i].direction.x * shots.listItems[i].speed) * sfw::getDeltaTime();
+			shots.listItems[i].Ypos += (shots.listItems[i].direction.y * shots.listItems[i].speed) * sfw::getDeltaTime();
+		}
 		
 	}
 
@@ -139,6 +161,14 @@ void AsterState::updateRock(Rock &rocks, MiniRock &minirocks, Ship & player, int
 	}
 }
 
+void AsterState::createBullet(List & shots, int i, Ship player)
+{
+	shots.listItems[i].Xpos = 400 + float(drand(-350, 350));
+	shots.listItems[i].Ypos = 300 + float(drand(-250, 250));
+	shots.listItems[i].direction.x = (float)cos((player.rotation + 90) * PI / 180);
+	shots.listItems[i].direction.y = (float)sin((player.rotation + 90) * PI / 180);
+}
+
 void AsterState::create(unsigned &shipT, unsigned &shotT, unsigned &rockT, unsigned &miniT)
 {
 	ship = shipT;
@@ -147,6 +177,10 @@ void AsterState::create(unsigned &shipT, unsigned &shotT, unsigned &rockT, unsig
 	mini = miniT;
 	player.direction.x = float(drand(-1, 1));
 	player.direction.y = float(drand(0, 1));
+	for (int i = 0; i < 10; ++i)
+	{
+		createRock(rocks[i]);
+	}
 }
 
 void AsterState::update()
@@ -157,7 +191,7 @@ void AsterState::update()
 
 void AsterState::draw() const
 {
-	drawTexture(ship, player.Xpos, player.Ypos, sfw::getTextureWidth(ship), sfw::getTextureHeight(ship), player.rotation, false);
+	drawShip(player);
 }
 
 STATE AsterState::next()

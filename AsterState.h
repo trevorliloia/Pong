@@ -20,7 +20,7 @@ class AsterState
 	{
 		float rotation = 0;
 		vec2 direction;
-		float speed = 500;
+		float speed = 100;
 		float accel = 0;
 		float Xpos = 400;
 		float Ypos = 300;
@@ -61,6 +61,22 @@ class AsterState
 		float topWall;
 	};
 
+	struct Bullet
+	{
+		float Xpos;
+		float Ypos;
+		float rotation = 0;
+		float size = 50;
+		float speed = 500;
+		vec2 direction;
+		float damage = 2;
+	};
+
+	struct List
+	{
+		int listSize = 0;
+		Bullet listItems[80];
+	};
 
 	unsigned ship;
 	unsigned rock;
@@ -73,6 +89,7 @@ class AsterState
 	Ship player;
 	Rock rocks[80];
 	MiniRock minirocks[80];
+	List shots;
 	int font;
 	int stretch = 0;
 	int keyTime = 50;
@@ -87,6 +104,7 @@ public:
 	void createRock(Rock &rocks);
 	void updateShip(Ship &player);
 	void updateRock(Rock &rocks, MiniRock &minirocks, Ship &player, int &hit, int &score);
+	void createBullet(List &shots, int i, Ship player);
 
 
 	void create(unsigned &ship, unsigned &shot, unsigned &rock, unsigned &mini);
