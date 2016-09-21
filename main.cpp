@@ -52,7 +52,7 @@ void main()
 			initContext(800, 600, "Pat: The Destroyer");
 			break;
 		case 6:
-			initContext(800, 600, "I dropped my monster condom for my magnum dong");
+			initContext(800, 600, "Whoops, forgot to write a title");
 			break;
 		case 7:
 			initContext(800, 600, "i am trash man");
@@ -112,14 +112,20 @@ void main()
 	unsigned brick = loadTextureMap("res/brick.png");
 	unsigned paddle = loadTextureMap("res/paddle.png");
 	unsigned paddle2 = loadTextureMap("res/paddle2.png");
-	
+	unsigned ship = loadTextureMap("res/ship.png");
+	unsigned shot = loadTextureMap("res/shot.png");
+	unsigned rock = loadTextureMap("res/rock.png");
+	unsigned mini = loadTextureMap("res/mini.png");
+
 	LoseState lose;
 	SplashState splash;
 	GameState gs;
 	MenuState menu;
 	Versus versus;
 	WinState win;
+	AsterState aster;
 
+	aster.create(ship, shot, rock, mini);
 	win.init(font, winTex);
 	lose.init(font, loseTex);
 	splash.init(font, drug);
@@ -132,6 +138,11 @@ void main()
 	{	
 		switch (current)
 		{
+		case ENTER_ASTER: aster.create(ship, shot, rock, mini);
+		case ASTER:
+			aster.update();
+			aster.draw();
+			break;
 		case ENTER_SPLASH: 
 			splash.play();
 			PlaySound("res/splash", NULL, SND_ASYNC);

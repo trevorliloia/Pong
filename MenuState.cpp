@@ -15,6 +15,7 @@ void MenuState::play()
 	game = false;
 	versus = false;
 	quit = false;
+	aster = false;
 }
 
 void MenuState::step()
@@ -31,6 +32,10 @@ void MenuState::step()
 	if (getKey('Q'))
 	{
 		quit = true;
+	}
+	if (getKey('A') && getKey('S'))
+	{
+		aster = true;
 	}
 }
 
@@ -53,6 +58,10 @@ STATE MenuState::next() const
 	if (quit)
 	{
 		return QUIT;
+	}
+	if (aster)
+	{
+		return ENTER_ASTER;
 	}
 	return MENU;
 }

@@ -65,6 +65,7 @@ class AsterState
 	unsigned ship;
 	unsigned rock;
 	unsigned mini;
+	unsigned shot;
 	int hit = 10;
 	int test = 100;
 	int score = 0;
@@ -83,12 +84,12 @@ class AsterState
 public:
 	double drand(float fMin, float fMax);
 	void drawShip(Ship player) const;
-	void createRock(Rock rocks);
+	void createRock(Rock &rocks);
 	void updateShip(Ship &player);
-	void updateRock(Rock rocks, MiniRock minirocks, Ship &player, int &hit, int &score);
+	void updateRock(Rock &rocks, MiniRock &minirocks, Ship &player, int &hit, int &score);
 
 
-	void create(unsigned ship, unsigned rock, unsigned mini);
+	void create(unsigned &ship, unsigned &shot, unsigned &rock, unsigned &mini);
 	void update();
 	void draw() const;
 

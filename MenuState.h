@@ -19,6 +19,7 @@ class MenuState
 	bool versus = false;
 	bool quit = false;
 	bool charEntered = false;
+	bool aster = false;
 	char favLetter;
 	char menuItem;
 

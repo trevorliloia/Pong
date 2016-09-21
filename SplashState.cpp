@@ -9,7 +9,7 @@ void SplashState::init(unsigned a_font, unsigned a_drug)
 
 void SplashState::play()
 {
-	timer = 3.f;
+	timer = 4.5f;
 }
 
 void SplashState::step()

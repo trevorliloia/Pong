@@ -20,7 +20,7 @@ void AsterState::drawShip(Ship player) const
 
 }
 
-void AsterState::createRock(Rock rocks)
+void AsterState::createRock(Rock &rocks)
 {
 	rocks.Xpos = 400;
 	rocks.Ypos = 300;
@@ -34,11 +34,15 @@ void AsterState::updateShip(Ship & player)
 	{
 		if (getKey('A'))
 		{
-			player.rotation--;
+			player.rotation += 4;
+			player.Xpos -= cos((player.rotation + 90) * PI / 180);
+			player.Ypos -= sin((player.rotation + 90) * PI / 180);
 		}
 		else if (getKey('D'))
 		{
-			player.rotation++;
+			player.rotation -= 4;
+			player.Xpos += cos((player.rotation + 90) * PI / 180);
+			player.Ypos += sin((player.rotation + 90) * PI / 180);
 		}
 
 		if (player.Xpos > 800)
@@ -57,10 +61,31 @@ void AsterState::updateShip(Ship & player)
 		{
 			player.Ypos = 600;
 		}
+		player.direction.x = cos((player.rotation + 90) * PI / 180);
+		player.direction.y = sin((player.rotation + 90) * PI / 180);
 		if (getKey('W'))
 		{
-			player.Xpos += (player.direction.x * player.speed);
-			player.Ypos += (player.direction.y * player.speed);
+			player.speed += 10;
+		}
+		if (getKey('S'))
+		{
+			player.speed -= 10;
+		}
+
+		player.Xpos += (player.direction.x * player.speed) * sfw::getDeltaTime();
+		player.Ypos += (player.direction.y * player.speed) * sfw::getDeltaTime();
+		
+		if (player.speed < 0)
+		{
+			player.speed++;
+		}
+		else if (player.speed > 400)
+		{
+			player.speed = 400;
+		}
+		else
+		{
+			player.speed--;
 		}
 
 		if (getKey(' ') && player.powerCore > 10)
@@ -74,7 +99,6 @@ void AsterState::updateShip(Ship & player)
 			player.blastTimer--;
 		}
 
-
 		
 	}
 
@@ -86,7 +110,7 @@ void AsterState::updateShip(Ship & player)
 	keyTime++;
 }
 
-void AsterState::updateRock(Rock rocks, MiniRock minirocks, Ship & player, int & hit, int & score)
+void AsterState::updateRock(Rock &rocks, MiniRock &minirocks, Ship & player, int & hit, int & score)
 {
 	if (playing)
 	{
@@ -115,16 +139,25 @@ void AsterState::updateRock(Rock rocks, MiniRock minirocks, Ship & player, int &
 	}
 }
 
-void AsterState::create(unsigned shipT, unsigned rockT, unsigned miniT)
+void AsterState::create(unsigned &shipT, unsigned &shotT, unsigned &rockT, unsigned &miniT)
 {
+	ship = shipT;
+	shot = shotT;
+	rock = rockT;
+	mini = miniT;
+	player.direction.x = float(drand(-1, 1));
+	player.direction.y = float(drand(0, 1));
 }
 
 void AsterState::update()
 {
+	updateShip(player);
+	updateRock(rocks[80], minirocks[80], player, hit, score);
 }
 
 void AsterState::draw() const
 {
+	drawTexture(ship, player.Xpos, player.Ypos, sfw::getTextureWidth(ship), sfw::getTextureHeight(ship), player.rotation, false);
 }
 
 STATE AsterState::next()

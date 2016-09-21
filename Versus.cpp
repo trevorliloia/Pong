@@ -163,11 +163,11 @@ void Versus::update()
 	if (playing)
 	{
 		acc += getDeltaTime();
-		if (score1 >= 12)
+		if (score1 >= 5)
 		{
 			won = true;
 		}
-		if (score2 >= 12)
+		if (score2 >= 5)
 		{
 			lost = true;
 		}
