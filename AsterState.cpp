@@ -107,13 +107,11 @@ void AsterState::updateShip(Ship & player)
 			player.blastTimer--;
 		}
 
-		if (getKey(' '))
+		if (getKey(' ') && keyTime >= 20)
 		{
-			for (int i = shots.listSize; i == shots.listSize; i = shots.listSize)
-			{
-				createBullet(shots, i, player);
-				shots.listSize++;
-			}
+			keyTime = 0;
+			createBullet(shots, shots.listSize, player);
+			shots.listSize++;
 		}
 
 		for (int i = 0; i < shots.listSize; ++i)
@@ -136,8 +134,8 @@ void AsterState::updateRock(Rock &rocks, MiniRock &minirocks, Ship & player, int
 {
 	if (playing)
 	{
-		rocks.Xpos += (rocks.direction.x * rocks.speed) * sfw::getDeltaTime();
-		rocks.Ypos += (rocks.direction.y * rocks.speed) * sfw::getDeltaTime();
+		rocks.Xpos += (rocks.direction.x * rocks.speed);
+		rocks.Ypos += (rocks.direction.y * rocks.speed);
 
 
 		if (rocks.Xpos < 0)
@@ -163,8 +161,9 @@ void AsterState::updateRock(Rock &rocks, MiniRock &minirocks, Ship & player, int
 
 void AsterState::createBullet(List & shots, int i, Ship player)
 {
-	shots.listItems[i].Xpos = 400 + float(drand(-350, 350));
-	shots.listItems[i].Ypos = 300 + float(drand(-250, 250));
+	shots.listItems[i].Xpos = player.Xpos;
+	shots.listItems[i].Ypos = player.Ypos;
+	shots.listItems[i].rotation = player.rotation;
 	shots.listItems[i].direction.x = (float)cos((player.rotation + 90) * PI / 180);
 	shots.listItems[i].direction.y = (float)sin((player.rotation + 90) * PI / 180);
 }
@@ -179,6 +178,7 @@ void AsterState::create(unsigned &shipT, unsigned &shotT, unsigned &rockT, unsig
 	player.direction.y = float(drand(0, 1));
 	for (int i = 0; i < 10; ++i)
 	{
+		srand(drand(-20, 20));
 		createRock(rocks[i]);
 	}
 }
@@ -186,12 +186,20 @@ void AsterState::create(unsigned &shipT, unsigned &shotT, unsigned &rockT, unsig
 void AsterState::update()
 {
 	updateShip(player);
-	updateRock(rocks[80], minirocks[80], player, hit, score);
+	for (int i = 0; i < 10; ++i)
+	{
+		updateRock(rocks[i], minirocks[i], player, hit, score);
+	}
+	
 }
 
 void AsterState::draw() const
 {
 	drawShip(player);
+	for (int i = 0; i < 10; ++i)
+	{
+		drawTexture(rock, rocks[i].Xpos, rocks[i].Ypos, getTextureWidth(rock), getTextureHeight(rock), 0.f, false);
+	}
 }
 
 STATE AsterState::next()
